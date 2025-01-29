@@ -2,6 +2,7 @@
 using DevSpot.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace DevSpot.Controllers
 {
@@ -29,7 +30,14 @@ namespace DevSpot.Controllers
         [HttpGet]
         public IActionResult CreateJobPost()
         {
-            return View();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var jobPosting = new JobPosting
+            {
+                UserId = userId
+            };
+
+            return View(jobPosting);
         }
 
         [HttpPost]
