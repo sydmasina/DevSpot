@@ -1,0 +1,72 @@
+﻿@model JobPosting
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center bg-primary text-white">
+                    <h4>New Job Post</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="needs-validation" asp-action="CreateJobPost">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <input type="hidden" asp-for="UserId" value="b8fc413b-58d6-4124-9f90-2b448688d015" />
+                        <div class="mb-3">
+                            <label asp-for="Title" class="form-label">Title</label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="title"
+                                   asp-for="Title"
+                                   placeholder="Enter the title"
+                                   required />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Location" class="form-label">Job Location</label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="location"
+                                   asp-for="Location"
+                                   placeholder="Enter the Job Location"
+                                   required />
+                            <span asp-validation-for="Location" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Company" class="form-label">Company Name</label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="location"
+                                   asp-for="Company"
+                                   placeholder="Enter the Job Location"
+                                   required />
+                            <span asp-validation-for="Company" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label">Description</label>
+                            <textarea class="form-control"
+                                      id="content"
+                                      asp-for="Description"
+                                      rows="5"
+                                      placeholder="Write your Job description here..."
+                                      required></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                       
+                        <div class="row justify-content-between">
+                            <div class="col-lg-4 mb-2 mb-lg-0">
+                                <button type="submit" class="btn btn-primary w-100">Save Job Post</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <a href="/JobPostings" class="btn btn-dark w-100">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
