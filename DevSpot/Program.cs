@@ -1,4 +1,3 @@
-using DevSpot.Constants;
 using DevSpot.Data;
 using DevSpot.Models;
 using DevSpot.Repositories;
@@ -52,7 +51,7 @@ namespace DevSpot
             app.MapRazorPages();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
+                pattern: "{controller=JobPostings}/{action=Index}/{id?}")
                 .WithStaticAssets();
 
             app.Run();

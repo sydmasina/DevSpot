@@ -27,7 +27,6 @@ namespace DevSpot.Models
 
         public bool IsApproved { get; set; }
 
-        [Required]
         public DateTime DatePosted { get; set; } = DateTime.Now;
 
         [Required]

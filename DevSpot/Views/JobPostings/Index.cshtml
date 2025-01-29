@@ -1,0 +1,28 @@
+﻿@model List<JobPosting>
+
+<div class="row mt-4 mb-2">
+    <div class="col text-start"><h2>List of available Job Posts</h2></div>
+</div>
+
+@if (Model == null || Model.Count == 0)
+{
+    <h4>No Job posts available at the moment.</h4>
+}
+else
+{
+    @foreach (var jobPost in Model)
+    {
+        <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">@jobPost.Title</h5>
+                    <small>@jobPost.DatePosted.ToString("dd MMM yyyy")</small>
+                </div>
+                <small>@jobPost.Location</small>
+                <p class="mb-1">@jobPost.Description</p>
+                <a href="#" class="card-link">Apply to job</a>
+            </a>
+        </div>
+    }
+}
+
