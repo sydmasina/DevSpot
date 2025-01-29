@@ -20,7 +20,7 @@ namespace DevSpot
                 options => options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseUrl")));
 
             builder.Services.AddDefaultIdentity<IdentityUser>(
-                options => options.SignIn.RequireConfirmedAccount = false
+                options => options.SignIn.RequireConfirmedAccount = true
                ).AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
