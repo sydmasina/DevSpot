@@ -1,4 +1,4 @@
-﻿@model JobPosting
+﻿@model DevSpot.ViewModels.JobPostingViewModel
 
 <div class="container mt-5">
     <div class="row justify-content-center">
@@ -10,7 +10,6 @@
                 <div class="card-body">
                     <form method="post" class="needs-validation" asp-action="CreateJobPost">
                         <div asp-validation-summary="All" class="text-danger"></div>
-                        <input type="hidden" asp-for="UserId" value="b8fc413b-58d6-4124-9f90-2b448688d015" />
                         <div class="mb-3">
                             <label asp-for="Title" class="form-label">Title</label>
                             <input type="text"
