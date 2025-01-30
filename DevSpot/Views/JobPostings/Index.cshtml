@@ -1,22 +1,25 @@
-﻿@model List<JobPosting>
+﻿@model IEnumerable<JobPosting>
 
-<div class="row mt-4 mb-2">
-    <div class="col text-start"><h2>List of available Job Posts</h2></div>
-</div>
 
-@if (Model == null || Model.Count == 0)
+
+@if (Model == null || Model.Count() == 0)
 {
-    <h4>No Job posts available at the moment.</h4>
+    <div class="row mt-4 mb-2">
+        <div class="col text-center"><p class="fw-bolder">No jobs available at the moment</p></div>
+    </div>
 }
 else
 {
+    <div class="row mt-4 mb-2">
+        <div class="col text-center fw-bolder"><h2>Available Jobs</h2></div>
+    </div>
     <div class="container">
         <div class="list-group">
             @foreach (var jobPost in Model)
             {
                 <a href="#" class="list-group-item list-group-item-action" aria-current="true">
                     <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">@jobPost.Title</h5>
+                        <h3 class="mb-1">@jobPost.Title</h3>
                         <small>@HelperFunctions.TimeAgo(jobPost.DatePosted)</small>
                     </div>
                     <p class="mb-1"><strong>Location:</strong>  @jobPost.Location</p>
@@ -29,3 +32,15 @@ else
 
 }
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let items = document.querySelectorAll(".list-group-item");
+
+        items.forEach(item => {
+            item.addEventListener("click", function () {
+                items.forEach(i => i.classList.remove("active"));
+                this.classList.add("active");
+            });
+        });
+    });
+</script>
