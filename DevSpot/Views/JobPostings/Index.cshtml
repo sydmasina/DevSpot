@@ -10,19 +10,20 @@
 }
 else
 {
-    @foreach (var jobPost in Model)
-    {
-        <div class="list-group">
-            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
-                <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">@jobPost.Title</h5>
-                    <small>@jobPost.DatePosted.ToString("dd MMM yyyy")</small>
+    <div class="container">
+        @foreach (var jobPost in Model)
+        {
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">@jobPost.Title</h4>
+                    <h6 class="card-subtitle mb-2 text-muted"> <strong class="mr-2">Location:</strong>  @jobPost.Location    <strong>Posted:</strong>  @jobPost.DatePosted.ToString("dd MMM yyyy")</h6>
+                    <p class="card-text">@jobPost.Description</p>
+                    <a href="#" class="card-link">Apply to job</a>
+                    @* <a href="#" class="card-link">Another link</a> *@
                 </div>
-                <small>@jobPost.Location</small>
-                <p class="mb-1">@jobPost.Description</p>
-                <a href="#" class="card-link">Apply to job</a>
-            </a>
-        </div>
-    }
+            </div>
+        }
+    </div>
+    
 }
 
