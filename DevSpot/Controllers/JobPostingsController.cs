@@ -25,7 +25,7 @@ namespace DevSpot.Controllers
         {
             IEnumerable<JobPosting> jobPostings = await _repository.GetAllAsync();
 
-            return View(jobPostings.ToList());
+            return View(jobPostings);
         }
 
         [HttpGet]
