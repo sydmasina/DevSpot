@@ -1,5 +1,6 @@
 ﻿using DevSpot.Models;
 using DevSpot.Repositories;
+using DevSpot.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -30,27 +31,30 @@ namespace DevSpot.Controllers
         [HttpGet]
         public IActionResult CreateJobPost()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var jobPosting = new JobPosting
-            {
-                UserId = userId
-            };
-
-            return View(jobPosting);
+            return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateJobPost(JobPosting obj)
+        public async Task<IActionResult> CreateJobPost(JobPostingViewModel jobPostingVM)
         {
-
             if (ModelState.IsValid)
             {
-                await _repository.AddAsync(obj);
+                var userId = _userManager.GetUserId(User) ?? throw new Exception("Need to be logged in to create a user.");
+
+                var jobPosting = new JobPosting
+                {
+                    Title = jobPostingVM.Title,
+                    Location = jobPostingVM.Location,
+                    Company = jobPostingVM.Company,
+                    Description = jobPostingVM.Description,
+                    UserId  = userId,
+                };
+
+                await _repository.AddAsync(jobPosting);
                 return RedirectToAction("Index");
             }
 
-            return View(obj);
+            return View(jobPostingVM);
         }
     }
 }
