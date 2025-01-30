@@ -1,4 +1,5 @@
-﻿using DevSpot.Models;
+﻿using DevSpot.Constants;
+using DevSpot.Models;
 using DevSpot.Repositories;
 using DevSpot.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -32,12 +33,14 @@ namespace DevSpot.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles =$"{Roles.Admin},{Roles.Employer}")]
         public IActionResult CreateJobPost()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Employer}")]
         public async Task<IActionResult> CreateJobPost(JobPostingViewModel jobPostingVM)
         {
             if (ModelState.IsValid)
