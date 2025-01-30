@@ -16,7 +16,7 @@ else
             {
                 <a href="#" class="list-group-item list-group-item-action" aria-current="true">
                     <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">@jobPost.Title</h5>
+                        <h4 class="mb-1">@jobPost.Title</h4>
                         <small>@HelperFunctions.TimeAgo(jobPost.DatePosted)</small>
                     </div>
                     <p class="mb-1"><strong>Location:</strong>  @jobPost.Location</p>
@@ -29,3 +29,15 @@ else
 
 }
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let items = document.querySelectorAll(".list-group-item");
+
+        items.forEach(item => {
+            item.addEventListener("click", function () {
+                items.forEach(i => i.classList.remove("active"));
+                this.classList.add("active");
+            });
+        });
+    });
+</script>
