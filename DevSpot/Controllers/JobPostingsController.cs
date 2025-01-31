@@ -5,6 +5,7 @@ using DevSpot.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace DevSpot.Controllers
 {
@@ -26,13 +27,24 @@ namespace DevSpot.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
+            if (User.IsInRole(Roles.Employer))
+            {
+                IEnumerable<JobPosting> allJobPostings = await _repository.GetAllAsync();
+
+                var userId = _userManager.GetUserId(User);
+
+                IEnumerable<JobPosting> filteredJobPostings = allJobPostings.Where(jp => jp.UserId == userId);
+
+                return View(filteredJobPostings);
+            }
+
             IEnumerable<JobPosting> jobPostings = await _repository.GetAllAsync();
 
             return View(jobPostings);
         }
 
         [HttpGet]
-        [Authorize(Roles =$"{Roles.Admin},{Roles.Employer}")]
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Employer}")]
         public IActionResult CreateJobPost()
         {
             return View();
@@ -52,7 +64,7 @@ namespace DevSpot.Controllers
                     Location = jobPostingVM.Location,
                     Company = jobPostingVM.Company,
                     Description = jobPostingVM.Description,
-                    UserId  = userId,
+                    UserId = userId,
                 };
 
                 await _repository.AddAsync(jobPosting);
@@ -66,16 +78,23 @@ namespace DevSpot.Controllers
         [Authorize(Roles = $"{Roles.Admin},{Roles.Employer}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _repository.DeleteAsync(id);
+            JobPosting jobPosting = await _repository.GetByIdAsync(id);
 
-                return Ok();
-            }catch(Exception ex)
+            if (jobPosting == null)
             {
-                return StatusCode(500, new { success = false, message = "An internal error occurred while deleting the item." });
+                return NotFound();
             }
-            
+
+            var userId = _userManager.GetUserId(User);
+
+            if (User.IsInRole(Roles.Admin) == false && jobPosting.UserId != userId)
+            {
+                return Forbid();
+            }
+
+            await _repository.DeleteAsync(id);
+
+            return Ok();
         }
     }
 }
