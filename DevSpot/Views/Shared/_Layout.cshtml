@@ -22,7 +22,7 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="JobPostings" asp-action="Index">All Jobs</a>
                         </li>
-                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        @if (User != null && (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.Employer)))
                         {
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="JobPostings" asp-action="CreateJobPost">Add Job</a>
