@@ -62,5 +62,18 @@ namespace DevSpot.Controllers
 
             return View(jobPostingVM);
         }
+
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Employer}")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+
+
+            return RedirectToAction("Index");
+        }
     }
 }
