@@ -38,12 +38,6 @@ else
                     }
                 </div>
             }
-
-
-            <button class="btn btn-info" onclick="showDynamicModal('/Shared/ShowInfoModal')">Show Info</button>
-            <button class="btn btn-success" onclick="showDynamicModal('/Shared/ShowSuccessModal')">Show Success</button>
-            <button class="btn btn-warning" onclick="showDynamicModal('/Shared/ShowWarningModal')">Show Warning</button>
-
         </div>
     </div>
 }
@@ -59,6 +53,10 @@ else
 
                 // Append new modal to placeholder
                 $('#modalPlaceholder').html(data);
+
+                // Set the controller name dynamically in a hidden field
+                $('#dynamicModal').find('#deleteControllerName').val("JobPostings");
+
 
                 // Show modal
                 $('#dynamicModal').modal('show');

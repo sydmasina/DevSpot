@@ -5,7 +5,6 @@ using DevSpot.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace DevSpot.Controllers
 {
@@ -63,17 +62,20 @@ namespace DevSpot.Controllers
             return View(jobPostingVM);
         }
 
+        [HttpDelete]
         [Authorize(Roles = $"{Roles.Admin},{Roles.Employer}")]
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null || id == 0)
+            try
             {
-                return NotFound();
+                await _repository.DeleteAsync(id);
+
+                return Ok();
+            }catch(Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = "An internal error occurred while deleting the item." });
             }
-
-
-
-            return RedirectToAction("Index");
+            
         }
     }
 }
