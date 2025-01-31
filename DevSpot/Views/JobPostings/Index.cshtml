@@ -18,7 +18,7 @@ else
         <div class="list-group">
             @foreach (var jobPost in Model)
             {
-                <div class="list-group-item list-group-item-action" aria-current="true">
+                <div id="job-post-@jobPost.Id" class="list-group-item list-group-item-action" aria-current="true">
                     <div class="d-flex w-100 justify-content-between">
                         <h3 class="mb-1">@jobPost.Title</h3>
                         <small>@HelperFunctions.TimeAgo(jobPost.DatePosted)</small>

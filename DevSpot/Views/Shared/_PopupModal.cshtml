@@ -36,7 +36,7 @@
             url: '/' + controllerName +'/Delete/' + itemIdToDelete,
             success: function(response) {
                 $('#dynamicModal').modal('hide');
-                location.reload(); // Refresh page after deletion
+                $('#job-post-' + itemIdToDelete).remove(); // Remove item visually instead of reload to minimize db calls
             },
             error: function() {
                 alert("Error deleting item.");
