@@ -66,16 +66,23 @@ namespace DevSpot.Controllers
         [Authorize(Roles = $"{Roles.Admin},{Roles.Employer}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _repository.DeleteAsync(id);
+            JobPosting jobPosting = await _repository.GetByIdAsync(id);
 
-                return Ok();
-            }catch(Exception ex)
+            if (jobPosting == null)
             {
-                return StatusCode(500, new { success = false, message = "An internal error occurred while deleting the item." });
+                return NotFound();
             }
-            
+
+            var userId = _userManager.GetUserId(User);
+
+            if(User.IsInRole(Roles.Admin) == false && jobPosting.UserId != userId)
+            {
+                return Forbid();
+            }
+
+            await _repository.DeleteAsync(id);
+
+            return Ok();
         }
     }
 }
