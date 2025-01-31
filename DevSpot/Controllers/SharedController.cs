@@ -1,47 +1,61 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using DevSpot.ViewModels;
 
 namespace DevSpot.Controllers
 {
     public class SharedController : Controller
     {
-        public JsonResult GetModalData(string modalType, int? id, string actionControllerName)
+        // Show confirmation modal before deleting
+        public IActionResult ConfirmDelete(int id)
         {
-            string title = "";
-            string message = "";
-            string actionUrl = "";
-            string buttonText = "";
-            string buttonClass = "";
-            string controllerName = actionControllerName;
+            var model = new PopupModalViewModel
+            {
+                Title = "Confirm Delete",
+                Message = "Are you sure you want to delete this entry?",
+                ModalType = "danger", // Red theme for delete confirmation
+                ItemId = id
+            };
 
-            // Determine the action type and set the modal content dynamically
-            if (modalType == "delete")
-            {
-                title = "Confirm Deletion";
-                message = "Are you sure you want to delete this item?";
-                buttonText = "Delete";
-                buttonClass = "btn-danger";  // Danger class for delete
-                actionUrl = Url.Action("Delete", controllerName, new { id = id });
-            }
-            else if (modalType == "info")
-            {
-                title = "Information";
-                message = "Here is some important information.";
-                buttonText = "OK";
-                buttonClass = "btn-info";  // Info class for info
-                controllerName = "Info";  // Controller for info action
-                actionUrl = Url.Action("Info", controllerName, new { id = id });
-            }
-            else
-            {
-                title = "Unknown Action";
-                message = "No action specified.";
-                buttonText = "Close";
-                buttonClass = "btn-secondary";
-                actionUrl = "#"; // Default action
-            }
+            return PartialView("_PopupModal", model);
+        }
 
-            // Return the modal data as JSON including the dynamic action URL and controller
-            return Json(new { title, message, buttonText, actionUrl, buttonClass });
+        // Show an info modal
+        public IActionResult ShowInfoModal()
+        {
+            var model = new PopupModalViewModel
+            {
+                Title = "Information",
+                Message = "This is an info modal.",
+                ModalType = "info"
+            };
+
+            return PartialView("_PopupModal", model);
+        }
+
+        // Show a success modal
+        public IActionResult ShowSuccessModal()
+        {
+            var model = new PopupModalViewModel
+            {
+                Title = "Success",
+                Message = "Your action was completed successfully!",
+                ModalType = "success"
+            };
+
+            return PartialView("_PopupModal", model);
+        }
+
+        // Show a warning modal
+        public IActionResult ShowWarningModal()
+        {
+            var model = new PopupModalViewModel
+            {
+                Title = "Warning",
+                Message = "Be careful! This action cannot be undone.",
+                ModalType = "warning"
+            };
+
+            return PartialView("_PopupModal", model);
         }
 
     }

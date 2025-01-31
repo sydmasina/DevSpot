@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<JobPosting>
-@Html.Partial("_PopupModal")
+
 
 
 @if (Model == null || Model.Count() == 0)
@@ -31,46 +31,37 @@ else
                     {
                         <div>
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal"
-                                    onclick="showPopupModal('delete', @jobPost.Id)">
+                                    onclick="showDynamicModal('/Shared/ConfirmDelete/@jobPost.Id')">
                                 Delete Item
                             </button>
                         </div>
                     }
                 </div>
             }
+
+
+            <button class="btn btn-info" onclick="showDynamicModal('/Shared/ShowInfoModal')">Show Info</button>
+            <button class="btn btn-success" onclick="showDynamicModal('/Shared/ShowSuccessModal')">Show Success</button>
+            <button class="btn btn-warning" onclick="showDynamicModal('/Shared/ShowWarningModal')">Show Warning</button>
+
         </div>
     </div>
 }
+<!-- Placeholder for modal -->
+<div id="modalPlaceholder"></div>
 
 @section Scripts {
     <script>
-        function showPopupModal(modalType, id) {
-            $.ajax({
-                url: '@Url.Action("GetModalData", "Shared")',
-                type: 'GET',
-                data: { modalType: 'delete', id: 1, actionControllerName: "JobPostings" },  // Example: Delete action
-                success: function (data) {
-                    if (data) {
-                        // Set modal content
-                        $('#popupModalLabel').text(data.title);
-                        $('#popupModalMessage').text(data.message);
-                        $('#popupModalActionBtn').text(data.buttonText);
-                        $('#popupModalActionBtn').attr('href', data.actionUrl);  // Dynamically set the action URL
+        function showDynamicModal(url) {
+            $.get(url, function(data) {
+                // Remove any existing modal
+                $('#dynamicModal').remove();
 
-                        // Apply the button class (btn-danger for delete, btn-info for info)
-                        $('#popupModalActionBtn').removeClass('btn-danger btn-info');
-                        $('#popupModalActionBtn').addClass(data.buttonClass);
+                // Append new modal to placeholder
+                $('#modalPlaceholder').html(data);
 
-                        // Show the modal
-                        var modal = new bootstrap.Modal(document.getElementById('popupModal'));
-                        modal.show();
-                    } else {
-                        console.log('Error: No data received.');
-                    }
-                },
-                error: function () {
-                    alert("An error occurred while fetching modal data.");
-                }
+                // Show modal
+                $('#dynamicModal').modal('show');
             });
         }
 

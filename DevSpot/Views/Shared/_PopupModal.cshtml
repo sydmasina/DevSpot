@@ -1,17 +1,46 @@
-﻿<div class="modal fade" id="popupModal" tabindex="-1" aria-labelledby="popupModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="popupModalLabel">Modal Title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+﻿@model DevSpot.ViewModels.PopupModalViewModel
+
+<div id="dynamicModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dynamicModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered" role="document">
+        <div class="modal-content border-@Model.ModalType">
+            <div class="modal-header bg-@Model.ModalType text-white">
+                <h5 class="modal-title">@Model.Title</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" onclick="onCloseModal()" aria-label="Close"></button>
             </div>
-            <div class="modal-body text-start">
-                <p id="popupModalMessage">This is a dynamic message.</p>
+            <div class="modal-body">
+                <p>@Model.Message</p>
             </div>
-            <div class="modal-footer justify-content-end">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <a href="#" class="btn btn-primary" id="popupModalActionBtn">OK</a>
+            <div class="modal-footer">
+                <button type="button" onclick="onCloseModal()" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                @if (Model.ItemId.HasValue)
+                {
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+                }
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    var itemIdToDelete = @Model.ItemId;
+
+    function onCloseModal(){
+        $('#dynamicModal').modal('hide');
+    }
+
+    $('#confirmDeleteBtn').click(function() {
+        $.ajax({
+            type: 'DELETE',
+            url: '/Item/Delete/' + itemIdToDelete,
+            success: function(response) {
+                $('#dynamicModal').modal('hide');
+                location.reload(); // Refresh page after deletion
+            },
+            error: function() {
+                alert("Error deleting item.");
+            }
+        });
+    });
+
+    $('#dynamicModal').modal('show');
+</script>
