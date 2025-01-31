@@ -13,11 +13,12 @@ else
     <div class="row mt-4 mb-2">
         <div class="col text-center fw-bolder"><h2>Available Jobs</h2></div>
     </div>
+
     <div class="container">
         <div class="list-group">
             @foreach (var jobPost in Model)
             {
-                <a href="#" class="list-group-item list-group-item-action" aria-current="true">
+                <div id="job-post-@jobPost.Id" class="list-group-item list-group-item-action" aria-current="true">
                     <div class="d-flex w-100 justify-content-between">
                         <h3 class="mb-1">@jobPost.Title</h3>
                         <small>@HelperFunctions.TimeAgo(jobPost.DatePosted)</small>
@@ -25,22 +26,52 @@ else
                     <p class="mb-1"><strong>Location:</strong>  @jobPost.Location</p>
                     <p class="mb-1"><strong>Company:</strong>  @jobPost.Company</p>
                     <p class="mb-1">@jobPost.Description</p>
-                </a>
+
+                    @if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.Employer))
+                    {
+                        <div>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal"
+                                    onclick="showDynamicModal('/Shared/ConfirmDelete/@jobPost.Id')">
+                                Delete Item
+                            </button>
+                        </div>
+                    }
+                </div>
             }
         </div>
     </div>
-
 }
+<!-- Placeholder for modal -->
+<div id="modalPlaceholder"></div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let items = document.querySelectorAll(".list-group-item");
+@section Scripts {
+    <script>
+        function showDynamicModal(url) {
+            $.get(url, function(data) {
+                // Remove any existing modal
+                $('#dynamicModal').remove();
 
-        items.forEach(item => {
-            item.addEventListener("click", function () {
-                items.forEach(i => i.classList.remove("active"));
-                this.classList.add("active");
+                // Append new modal to placeholder
+                $('#modalPlaceholder').html(data);
+
+                // Set the controller name dynamically in a hidden field
+                $('#dynamicModal').find('#deleteControllerName').val("JobPostings");
+
+
+                // Show modal
+                $('#dynamicModal').modal('show');
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let items = document.querySelectorAll(".list-group-item");
+
+            items.forEach(item => {
+                item.addEventListener("click", function () {
+                    items.forEach(i => i.classList.remove("active"));
+                    this.classList.add("active");
+                });
             });
         });
-    });
-</script>
+    </script>
+}

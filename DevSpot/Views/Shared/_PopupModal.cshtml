@@ -1,0 +1,48 @@
+﻿@model DevSpot.ViewModels.PopupModalViewModel
+
+<div id="dynamicModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dynamicModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered" role="document">
+        <div class="modal-content border-@Model.ModalType">
+            <div class="modal-header bg-@Model.ModalType text-white">
+                <h5 class="modal-title">@Model.Title</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" onclick="onCloseModal()" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>@Model.Message</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="onCloseModal()" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                @if (Model.ItemId.HasValue)
+                {
+                    <input type="hidden" id="deleteControllerName" />
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var itemIdToDelete = @Model.ItemId;
+
+    function onCloseModal(){
+        $('#dynamicModal').modal('hide');
+    }
+
+    $('#confirmDeleteBtn').click(function() {
+        var controllerName = $('#deleteControllerName').val();
+        $.ajax({
+            type: 'DELETE',
+            url: '/' + controllerName +'/Delete/' + itemIdToDelete,
+            success: function(response) {
+                $('#dynamicModal').modal('hide');
+                $('#job-post-' + itemIdToDelete).remove(); // Remove item visually instead of reload to minimize db calls
+            },
+            error: function() {
+                alert("Error deleting item.");
+            }
+        });
+    });
+
+    $('#dynamicModal').modal('show');
+</script>
