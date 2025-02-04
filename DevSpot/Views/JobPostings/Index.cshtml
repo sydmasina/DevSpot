@@ -25,14 +25,14 @@ else
                     </div>
                     <p class="mb-1"><strong>Location:</strong>  @jobPost.Location</p>
                     <p class="mb-1"><strong>Company:</strong>  @jobPost.Company</p>
-                    <p class="mb-1">@jobPost.Description</p>
+                    <p class="mb-1 text-truncate description">@jobPost.Description</p>
 
                     @if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.Employer))
                     {
                         <div>
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal"
                                     onclick="showDynamicModal('/Shared/ConfirmDelete/@jobPost.Id')">
-                                Delete Item
+                                <i class="bi bi-trash"></i> Delete Item
                             </button>
                         </div>
                     }
