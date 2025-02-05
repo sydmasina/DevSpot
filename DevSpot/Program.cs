@@ -13,7 +13,12 @@ namespace DevSpot
             var builder = WebApplication.CreateBuilder(args);
 
             // Read connection string from Azure environment variables
-            var connectionString = Environment.GetEnvironmentVariable("DefaultConnection");
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new InvalidOperationException("Database connection string is missing!");
+            }
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
