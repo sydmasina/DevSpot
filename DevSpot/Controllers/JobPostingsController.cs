@@ -87,6 +87,11 @@ namespace DevSpot.Controllers
 
             var userId = _userManager.GetUserId(User);
 
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
             if (User.IsInRole(Roles.Admin) == false && jobPosting.UserId != userId)
             {
                 return Forbid();
@@ -95,6 +100,71 @@ namespace DevSpot.Controllers
             await _repository.DeleteAsync(id);
 
             return Ok();
+        }
+
+        [HttpGet]
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Employer}")]
+        public async Task<IActionResult> EditJobPost(int id)
+        {
+            JobPosting jobPosting = await _repository.GetByIdAsync(id);
+
+            if (jobPosting == null)
+            {
+                return NotFound();
+            }
+
+            var userId = _userManager.GetUserId(User);
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            if (User.IsInRole(Roles.Admin) == false && jobPosting.UserId != userId)
+            {
+                return Forbid();
+            }
+
+            var jobPostingVM = new UpdateJobPostingViewModel
+            {
+                Title = jobPosting.Title,
+                Location = jobPosting.Location,
+                Company = jobPosting.Company,
+                Description = jobPosting.Description,
+                JobId = jobPosting.Id,
+            };
+
+            return View(jobPostingVM);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Employer}")]
+        public async Task<IActionResult> EditJobPost(UpdateJobPostingViewModel jobPostingVM)
+        {
+            var userId = _userManager.GetUserId(User);
+
+            if(userId == null)
+            {
+                return Unauthorized();
+            }
+
+            if (ModelState.IsValid)
+            {
+                JobPosting updatedJobPosting = new JobPosting
+                {
+                    Id = jobPostingVM.JobId,
+                    Title = jobPostingVM.Title,
+                    Location = jobPostingVM.Location,
+                    Company = jobPostingVM.Company,
+                    Description = jobPostingVM.Description,
+                    UserId = userId,
+                };
+
+                await _repository.UpdateAsync(updatedJobPosting);
+
+                return RedirectToAction("Index");
+            }
+            return View(jobPostingVM);
         }
     }
 }

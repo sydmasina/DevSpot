@@ -17,10 +17,13 @@
     <div class="p-4 justify-content-end">
         @if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.Employer))
         {
-            <div class="d-flex justify-content-end">
+            <div class="d-flex justify-content-between">
+                <a class="btn btn-primary" asp-controller="JobPostings" asp-action="EditJobPost" asp-route-id="@Model.Id">
+                    <i class="bi bi-pencil-square"></i> Edit Post
+                </a>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="offcanvas" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal"
                         onclick="showDynamicModal('/Shared/ConfirmDelete/@Model.Id')">
-                    <i class="bi bi-trash"></i> Delete Item
+                    <i class="bi bi-trash"></i> Delete Post
                 </button>
             </div>
         }
