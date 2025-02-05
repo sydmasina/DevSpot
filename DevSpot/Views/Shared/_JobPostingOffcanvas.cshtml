@@ -1,0 +1,28 @@
+﻿@model JobPosting
+@{
+    var offcanvasId = ViewData["OffcanvasId"] as string; // Get unique Offcanvas ID
+}
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="@offcanvasId" aria-labelledby="offcanvasLabel">
+    <div class="offcanvas-header">
+        <h3 class="offcanvas-title">@Model.Title</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <p><strong>Company:</strong> @Model.Company</p>
+        <p><strong>Location:</strong> @Model.Location</p>
+        <hr />
+        <p>@Model.Description</p>
+    </div>
+    <div class="p-4 justify-content-end">
+        @if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.Employer))
+        {
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="offcanvas" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal"
+                        onclick="showDynamicModal('/Shared/ConfirmDelete/@Model.Id')">
+                    <i class="bi bi-trash"></i> Delete Item
+                </button>
+            </div>
+        }
+    </div>
+</div>

@@ -18,7 +18,13 @@ else
         <div class="list-group">
             @foreach (var jobPost in Model)
             {
-                <div id="job-post-@jobPost.Id" class="list-group-item list-group-item-action" aria-current="true">
+                var offcanvasId = "jobPostingOffcanvas_" + Guid.NewGuid().ToString("N"); // Unique ID for each offcanvas
+                
+                <div id="job-post-@jobPost.Id"
+                     class="list-group-item list-group-item-action"
+                     aria-current="true"
+                     data-bs-toggle="offcanvas" 
+                     data-bs-target="#@offcanvasId">
                     <div class="d-flex w-100 justify-content-between">
                         <h3 class="mb-1">@jobPost.Title</h3>
                         <small>@HelperFunctions.TimeAgo(jobPost.DatePosted)</small>
@@ -26,17 +32,10 @@ else
                     <p class="mb-1"><strong>Location:</strong>  @jobPost.Location</p>
                     <p class="mb-1"><strong>Company:</strong>  @jobPost.Company</p>
                     <p class="mb-1 text-truncate description">@jobPost.Description</p>
-
-                    @if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.Employer))
-                    {
-                        <div>
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal"
-                                    onclick="showDynamicModal('/Shared/ConfirmDelete/@jobPost.Id')">
-                                <i class="bi bi-trash"></i> Delete Item
-                            </button>
-                        </div>
-                    }
                 </div>
+
+                <!-- Include the offcanvas partial -->
+                @await Html.PartialAsync("_JobPostingOffcanvas", jobPost, new ViewDataDictionary(ViewData) { { "OffcanvasId", offcanvasId } })
             }
         </div>
     </div>
