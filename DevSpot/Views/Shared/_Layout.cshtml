@@ -42,6 +42,12 @@
                                    asp-action="CreateJobPost"><i class="bi bi-plus-circle"></i> Add Job</a>
                             </li>
                         }
+                        <li class="nav-item">
+                            <a class="nav-link
+                               @((currentController == "JobPostings" && currentAction=="Privacy")? "active" : "")"
+                               asp-area="" asp-controller="JobPostings"
+                               asp-action="Privacy"><i class="bi bi-info-circle"></i> Privacy</a>
+                        </li>
                     </ul>
                     <div class="d-flex">
                         <ul class="navbar-nav me-auto">
@@ -80,7 +86,7 @@
 
     <footer class="border-top footer bg-primary text-white">
         <div class="container">
-            &copy; 2025 - DevSpot
+            &copy; 2025 - DevSpot - <a class="text-decoration-none text-light fw-bold" asp-action="Privacy" asp-controller="JobPostings">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

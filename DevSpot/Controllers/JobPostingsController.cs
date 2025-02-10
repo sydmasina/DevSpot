@@ -166,5 +166,12 @@ namespace DevSpot.Controllers
             }
             return View(jobPostingVM);
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Privacy()
+        {
+            return View();
+        }
     }
 }
