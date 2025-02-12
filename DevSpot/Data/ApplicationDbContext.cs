@@ -7,6 +7,9 @@ namespace DevSpot.Data
     public class ApplicationDbContext : IdentityDbContext
     {
         public DbSet<JobPosting> JobPostings { get; set; }
+
+        public DbSet<JobApplication> JobApplications { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
