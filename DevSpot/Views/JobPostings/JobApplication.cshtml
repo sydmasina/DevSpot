@@ -8,28 +8,32 @@
                     <h4>Apply to Job Post</h4>
                 </div>
                 <div class="card-body">
-                    <form method="post" class="needs-validation" asp-action="CreateJobPost">
+                    <form method="post" class="needs-validation" asp-action="JobApplication">
                         <div asp-validation-summary="All" class="text-danger"></div>
-                        <label class="form-label mb-1" for="ResumeInput">Upload Resume *</label>
+                        <label class="form-label mb-1" for="ResumeInput"><strong>Upload Resume</strong> *</label>
                         <div class="mb-3">
                             <div class="input-group mb-1">
                                 <input type="file"
                                        class="form-control"
                                        id="ResumeInput"
-                                       asp-for="Resume">
+                                       asp-for="Resume"
+                                       accept=".pdf,doc,.docx">
 
                             </div>
+                            <small>Max file size of 5mb. Accepted file types (.pdf, doc, .docx)</small>
                             <span asp-validation-for="Resume" class="text-danger"></span>
                         </div>
 
-                        <label class="form-label mb-1" for="CoverLetterInput">Upload Cover letter</label>
+                        <label class="form-label mb-1" for="CoverLetterInput"><strong>Upload Cover letter </strong></label>
                         <div class="mb-4">
                             <div class="input-group mb-1">
                                 <input type="file"
                                        class="form-control"
                                        id="CoverLetterInput"
-                                       asp-for="CoverLetter">
+                                       asp-for="CoverLetter"
+                                       accept=".pdf,doc,.docx">
                             </div>
+                            <small>Max file size of 5mb. Accepted file types (.pdf, doc, .docx)</small>
                             <span asp-validation-for="CoverLetter" class="text-danger"></span>
                         </div>
                         
