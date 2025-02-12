@@ -8,8 +8,8 @@ namespace DevSpot.ViewModels
         public int JobPostingId { get; set; }
 
         [Required]
-        public string Resume { get; set; } = string.Empty;
+        public IFormFile Resume { get; set; }
 
-        public string? CoverLetter { get; set; } = string.Empty;
+        public IFormFile? CoverLetter { get; set; }
     }
 }
