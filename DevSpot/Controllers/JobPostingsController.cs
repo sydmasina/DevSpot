@@ -173,5 +173,23 @@ namespace DevSpot.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        [Authorize(Roles = $"{Roles.JobSeeker}")]
+        public async Task<IActionResult> JobApplication(int jobId)
+        {
+            JobPosting jobPosting = await _repository.GetByIdAsync(jobId);
+
+            if (jobPosting == null)
+            {
+                return NotFound();
+            }
+
+            JobApplicationViewModel jobApplicationVm = new JobApplicationViewModel
+            {
+                JobPostingId = jobPosting.Id,
+            };
+            return View(jobApplicationVm);
+        }
     }
 }
