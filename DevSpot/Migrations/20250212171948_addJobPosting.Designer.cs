@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DevSpot.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250212151523_addJobApplicat")]
-    partial class addJobApplicat
+    [Migration("20250212171948_addJobPosting")]
+    partial class addJobPosting
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,16 +36,16 @@ namespace DevSpot.Migrations
                     b.Property<DateTime>("ApplicationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CoverLetter")
+                    b.Property<byte[]>("CoverLetter")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<int>("JobPostingId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Resume")
+                    b.Property<byte[]>("Resume")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()

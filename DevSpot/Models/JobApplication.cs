@@ -12,20 +12,18 @@ namespace DevSpot.Models
         [Required]
         public string UserId { get; set; }
 
-        [ForeignKey(nameof(UserId))]
         public IdentityUser User { get; set; }
 
         [Required]
         public int JobPostingId { get; set; }
 
-        [ForeignKey(nameof(JobPostingId))]
         public JobPosting JobPosting { get; set; }
 
         [Required]
-        public string Resume { get; set; }
+        public byte[] Resume { get; set; }
 
         [Required]
-        public string CoverLetter { get; set; }
+        public byte[] CoverLetter { get; set; }
 
         [Required]
         public DateTime ApplicationDate { get; set; } = DateTime.Now;

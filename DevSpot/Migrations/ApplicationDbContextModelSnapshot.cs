@@ -33,16 +33,16 @@ namespace DevSpot.Migrations
                     b.Property<DateTime>("ApplicationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CoverLetter")
+                    b.Property<byte[]>("CoverLetter")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<int>("JobPostingId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Resume")
+                    b.Property<byte[]>("Resume")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -54,7 +54,7 @@ namespace DevSpot.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("JobApplications", (string)null);
+                    b.ToTable("JobApplications");
                 });
 
             modelBuilder.Entity("DevSpot.Models.JobPosting", b =>
@@ -99,7 +99,7 @@ namespace DevSpot.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("JobPostings", (string)null);
+                    b.ToTable("JobPostings");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
