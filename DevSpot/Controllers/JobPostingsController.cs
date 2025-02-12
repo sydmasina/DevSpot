@@ -13,14 +13,17 @@ namespace DevSpot.Controllers
     public class JobPostingsController : Controller
     {
         private readonly IRepository<JobPosting> _repository;
+        private readonly IRepository<JobApplication> _applicationRepository;
         private readonly UserManager<IdentityUser> _userManager;
 
         public JobPostingsController(
             IRepository<JobPosting> repository,
+            IRepository<JobApplication> applicationRepository,
             UserManager<IdentityUser> userManager)
         {
             _repository = repository;
             _userManager = userManager;
+            _applicationRepository = applicationRepository;
         }
 
         [HttpGet]
@@ -190,6 +193,68 @@ namespace DevSpot.Controllers
                 JobPostingId = jobPosting.Id,
             };
             return View(jobApplicationVm);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = $"{Roles.JobSeeker}")]
+        public async Task<IActionResult> JobApplication(JobApplicationViewModel jobApplicationVM)
+        {
+            var allowedExtensions = new[] { ".pdf", ".doc", ".docx" };
+            long maxFileSize = 5 * 1024 * 1024; // 5MB in bytes
+
+            
+            if (jobApplicationVM.Resume.Length > maxFileSize)
+            {
+                ModelState.AddModelError("resume", "File size must be less than 5MB.");
+                return View();
+            }
+
+            // Validate Cover Letter if available
+            if(jobApplicationVM.CoverLetter != null)
+            {
+                if (jobApplicationVM.CoverLetter.Length > maxFileSize)
+                {
+                    ModelState.AddModelError("coverLetter", "File size must be less than 5MB.");
+                    return View();
+                }
+            }
+
+            if (ModelState.IsValid) 
+            {
+                byte[] resumeData;
+                byte[]? coverLetterData = null;
+
+                using (var ms = new MemoryStream())
+                {
+                    await jobApplicationVM.Resume.CopyToAsync(ms);
+                    resumeData = ms.ToArray();
+                }
+
+                if (jobApplicationVM.CoverLetter != null)
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        await jobApplicationVM.CoverLetter.CopyToAsync(ms);
+                        coverLetterData = ms.ToArray();
+                    }
+                }
+
+
+                var jobApplication = new JobApplication
+                {
+                    JobPostingId = jobApplicationVM.JobPostingId,
+                    UserId = _userManager.GetUserId(User),
+                    Resume = resumeData,
+                    CoverLetter = coverLetterData,
+                };
+
+                // Save the job application to the database
+                await _applicationRepository.AddAsync(jobApplication);
+                return RedirectToAction("Index");
+            }
+
+            return View(jobApplicationVM);
+            
         }
     }
 }
