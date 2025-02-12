@@ -32,6 +32,7 @@ namespace DevSpot
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Services.AddScoped<IRepository<JobPosting>, JobPostingRepository>();
+            builder.Services.AddScoped<IRepository<JobApplication>, JobApplicationRepository>();
 
             var app = builder.Build();
 

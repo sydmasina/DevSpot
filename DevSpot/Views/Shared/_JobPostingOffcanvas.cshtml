@@ -27,5 +27,13 @@
                 </button>
             </div>
         }
+        else
+        {
+            <div class="d-flex justify-content-end">
+                <a class="btn btn-primary" asp-controller="JobPostings" asp-action="JobApplication" asp-route-jobId="@Model.Id">
+                    Apply
+                </a>
+            </div>
+        }
     </div>
 </div>
