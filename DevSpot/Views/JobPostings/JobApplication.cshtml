@@ -1,0 +1,53 @@
+﻿@model DevSpot.ViewModels.JobApplicationViewModel
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center bg-primary text-white">
+                    <h4>Apply to Job Post</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="needs-validation" asp-action="CreateJobPost">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <label class="form-label mb-1" for="ResumeInput">Upload Resume *</label>
+                        <div class="mb-3">
+                            <div class="input-group mb-1">
+                                <input type="file"
+                                       class="form-control"
+                                       id="ResumeInput"
+                                       asp-for="Resume">
+
+                            </div>
+                            <span asp-validation-for="Resume" class="text-danger"></span>
+                        </div>
+
+                        <label class="form-label mb-1" for="CoverLetterInput">Upload Cover letter</label>
+                        <div class="mb-4">
+                            <div class="input-group mb-1">
+                                <input type="file"
+                                       class="form-control"
+                                       id="CoverLetterInput"
+                                       asp-for="CoverLetter">
+                            </div>
+                            <span asp-validation-for="CoverLetter" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="row justify-content-between">
+                            <div class="col-lg-4 mb-2 mb-lg-0">
+                                <a href="/JobPostings" class="btn btn-light w-100"><i class="bi bi-box-arrow-left"></i> Cancel</a>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="submit" class="btn btn-primary w-100"><i class="bi bi-floppy"></i> Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
