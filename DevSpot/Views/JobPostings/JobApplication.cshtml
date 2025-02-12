@@ -8,9 +8,10 @@
                     <h4>Apply to Job Post</h4>
                 </div>
                 <div class="card-body">
-                    <form method="post" class="needs-validation" asp-action="JobApplication">
+                    <form method="post" enctype="multipart/form-data" class="needs-validation" asp-action="JobApplication">
                         <div asp-validation-summary="All" class="text-danger"></div>
-                        <label class="form-label mb-1" for="ResumeInput"><strong>Upload Resume</strong> *</label>
+                        <input type="text" class="form-control" id="JobPostingId" asp-for="JobPostingId" hidden>
+                        <label class="form-label mb-1" for="Resume"><strong>Upload Resume</strong> *</label>
                         <div class="mb-3">
                             <div class="input-group mb-1">
                                 <input type="file"
@@ -36,7 +37,7 @@
                             <small>Max file size of 5mb. Accepted file types (.pdf, doc, .docx)</small>
                             <span asp-validation-for="CoverLetter" class="text-danger"></span>
                         </div>
-                        
+
                         <div class="row justify-content-between">
                             <div class="col-lg-4 mb-2 mb-lg-0">
                                 <a href="/JobPostings" class="btn btn-light w-100"><i class="bi bi-box-arrow-left"></i> Cancel</a>
