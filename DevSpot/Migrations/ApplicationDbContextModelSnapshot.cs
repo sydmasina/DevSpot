@@ -22,6 +22,41 @@ namespace DevSpot.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("DevSpot.Models.JobApplication", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ApplicationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CoverLetter")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("JobPostingId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Resume")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobPostingId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("JobApplications", (string)null);
+                });
+
             modelBuilder.Entity("DevSpot.Models.JobPosting", b =>
                 {
                     b.Property<int>("Id")
@@ -64,7 +99,7 @@ namespace DevSpot.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("JobPostings");
+                    b.ToTable("JobPostings", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -267,6 +302,25 @@ namespace DevSpot.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("DevSpot.Models.JobApplication", b =>
+                {
+                    b.HasOne("DevSpot.Models.JobPosting", "JobPosting")
+                        .WithMany()
+                        .HasForeignKey("JobPostingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("JobPosting");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DevSpot.Models.JobPosting", b =>
