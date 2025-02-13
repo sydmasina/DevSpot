@@ -1,0 +1,56 @@
+﻿@model IEnumerable<JobApplication>
+
+
+
+@if (Model == null || Model.Count() == 0)
+{
+    <div class="row mt-4 mb-2">
+        <div class="col text-center"><p class="fw-bolder">No one has applies to this Job Post yet</p></div>
+    </div>
+}
+else
+{
+    <h2>Job Applications</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Applicant</th>
+                <th>Job Title</th>
+                <th>Application Date</th>
+                <th>Resume</th>
+                <th>Cover Letter</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var application in Model)
+            {
+                <tr>
+                    <td>@application.User?.UserName</td>
+                    <td>@application.JobPosting?.Title</td>
+                    <td>@application.ApplicationDate.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        @if (application.Resume != null)
+                        {
+                            <a asp-action="DownloadResume" asp-route-id="@application.Id">Download Resume</a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">No Resume</span>
+                        }
+                    </td>
+                    <td>
+                        @if (application.CoverLetter != null)
+                        {
+                            <a asp-action="DownloadCoverLetter" asp-route-id="@application.Id">Download Cover Letter</a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">No Cover Letter</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
