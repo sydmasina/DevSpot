@@ -13,6 +13,9 @@
         <p><strong>Location:</strong> @Model.Location</p>
         <hr />
         <p>@Model.Description</p>
+        @if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.Employer)){
+            <a asp-controller="JobPostings" asp-action="JobApplicationList" asp-route-jobId="@Model.Id">View Applications</a>
+        }
     </div>
     <div class="p-4 justify-content-end">
         @if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.Employer))
