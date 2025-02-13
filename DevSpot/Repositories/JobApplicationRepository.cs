@@ -27,7 +27,10 @@ namespace DevSpot.Repositories
 
         public async Task<IEnumerable<JobApplication>> GetAllAsync()
         {
-            var jobApplications = await _context.JobApplications.ToListAsync();
+            var jobApplications = await _context.JobApplications
+                .Include(a => a.User)
+                .Include(a => a.JobPosting)
+                .ToListAsync();
 
             if (jobApplications == null)
             {

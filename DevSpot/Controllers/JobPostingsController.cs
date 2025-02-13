@@ -1,4 +1,5 @@
 ﻿using DevSpot.Constants;
+using DevSpot.Data;
 using DevSpot.Models;
 using DevSpot.Repositories;
 using DevSpot.ViewModels;
@@ -146,7 +147,7 @@ namespace DevSpot.Controllers
         {
             var userId = _userManager.GetUserId(User);
 
-            if(userId == null)
+            if (userId == null)
             {
                 return Unauthorized();
             }
@@ -202,7 +203,7 @@ namespace DevSpot.Controllers
             var allowedExtensions = new[] { ".pdf", ".doc", ".docx" };
             long maxFileSize = 5 * 1024 * 1024; // 5MB in bytes
 
-            
+
             if (jobApplicationVM.Resume.Length > maxFileSize)
             {
                 ModelState.AddModelError("resume", "File size must be less than 5MB.");
@@ -210,7 +211,7 @@ namespace DevSpot.Controllers
             }
 
             // Validate Cover Letter if available
-            if(jobApplicationVM.CoverLetter != null)
+            if (jobApplicationVM.CoverLetter != null)
             {
                 if (jobApplicationVM.CoverLetter.Length > maxFileSize)
                 {
@@ -219,7 +220,7 @@ namespace DevSpot.Controllers
                 }
             }
 
-            if (ModelState.IsValid) 
+            if (ModelState.IsValid)
             {
                 byte[] resumeData;
                 byte[]? coverLetterData = null;
@@ -254,7 +255,31 @@ namespace DevSpot.Controllers
             }
 
             return View(jobApplicationVM);
-            
+        }
+
+        [HttpGet]
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Employer}")]
+        public async Task<IActionResult> JobApplicationList(int jobId)
+        {
+            JobPosting jobPosting = await _repository.GetByIdAsync(jobId);
+
+            if (jobPosting == null)
+            {
+                return NotFound();
+            }
+
+            var jobApplications = await _applicationRepository.GetAllAsync();
+
+            var filteredJobApplications = jobApplications.Where(ja => ja.JobPostingId == jobId);
+
+            return View(filteredJobApplications);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Employer}")]
+        public ActionResult DownloadDocument(byte[] documentData, string documentName)
+        {
+            return File(documentData, "application/octet-stream", documentName);
         }
     }
 }
