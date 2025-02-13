@@ -1,6 +1,6 @@
 ﻿namespace DevSpot.Utilities
 {
-    public class HelperFunctions
+    public static class HelperFunctions
     {
         public static string TimeAgo(DateTime date)
         {
@@ -19,5 +19,17 @@
 
             return $"{timeSpan.Days / 365} years ago";
         }
+
+        public static string GetFileExtension(string mimeType)
+        {
+            return mimeType switch
+            {
+                "application/pdf" => ".pdf",
+                "application/msword" => ".doc",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document" => ".docx",
+                _ => ".bin"
+            };
+        }
+
     }
 }
