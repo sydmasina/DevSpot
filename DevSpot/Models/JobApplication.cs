@@ -22,7 +22,11 @@ namespace DevSpot.Models
         [Required]
         public byte[] Resume { get; set; }
 
+        public string ResumeFileType { get; set; }
+
         public byte[]? CoverLetter { get; set; }
+
+        public string CoverLetterFileType { get; set; }
 
         [Required]
         public DateTime ApplicationDate { get; set; } = DateTime.Now;

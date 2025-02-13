@@ -2,6 +2,7 @@
 using DevSpot.Data;
 using DevSpot.Models;
 using DevSpot.Repositories;
+using DevSpot.Utilities;
 using DevSpot.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -224,6 +225,8 @@ namespace DevSpot.Controllers
             {
                 byte[] resumeData;
                 byte[]? coverLetterData = null;
+                string covereLetterFileType = null;
+                string resumeFileType = jobApplicationVM.Resume.ContentType;
 
                 using (var ms = new MemoryStream())
                 {
@@ -238,6 +241,7 @@ namespace DevSpot.Controllers
                         await jobApplicationVM.CoverLetter.CopyToAsync(ms);
                         coverLetterData = ms.ToArray();
                     }
+                    covereLetterFileType = jobApplicationVM.CoverLetter.ContentType;
                 }
 
 
@@ -246,7 +250,9 @@ namespace DevSpot.Controllers
                     JobPostingId = jobApplicationVM.JobPostingId,
                     UserId = _userManager.GetUserId(User),
                     Resume = resumeData,
+                    ResumeFileType = resumeFileType,
                     CoverLetter = coverLetterData,
+                    CoverLetterFileType = covereLetterFileType
                 };
 
                 // Save the job application to the database
@@ -280,6 +286,37 @@ namespace DevSpot.Controllers
         public ActionResult DownloadDocument(byte[] documentData, string documentName)
         {
             return File(documentData, "application/octet-stream", documentName);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Employer}")]
+        public async Task<IActionResult> DownloadResume(int id)
+        {
+            var application = await _applicationRepository.GetByIdAsync(id);
+
+            if (application?.Resume == null) return NotFound();
+
+            string extension = HelperFunctions.GetFileExtension(application.ResumeFileType);
+
+            string userName = application.User.UserName ?? "Applicant";
+
+            return File(application.Resume, "application/pdf", $"{application.User?.UserName}_Resume{extension}");
+            
+        }
+
+        [HttpGet]
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Employer}")]
+        public async Task<IActionResult> DownloadCoverLetter(int id)
+        {
+            var application = await _applicationRepository.GetByIdAsync(id);
+
+            if (application?.CoverLetter == null) return NotFound();
+
+            string extension = HelperFunctions.GetFileExtension(application.CoverLetterFileType);
+
+            string userName = application.User.UserName ?? "Applicant";
+
+            return File(application.CoverLetter, "application/pdf", $"{userName}_CoverLetter{extension}");
         }
     }
 }

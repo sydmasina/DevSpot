@@ -40,9 +40,18 @@ namespace DevSpot.Repositories
             return jobApplications;
         }
 
-        public Task<JobApplication> GetByIdAsync(int id)
+        public async Task<JobApplication> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var jobApplication = await _context.JobApplications
+                .Include(a => a.User)
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (jobApplication == null)
+            {
+                throw new KeyNotFoundException();
+            }
+
+            return jobApplication;
         }
 
         public Task UpdateAsync(JobApplication entity)
