@@ -24,7 +24,7 @@ namespace DevSpot
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddDbContext<ApplicationDbContext>(
-                options => options.UseSqlServer(connectionString));
+                options => options.UseSqlite(connectionString));
 
             builder.Services.AddDefaultIdentity<IdentityUser>(
                 options => options.SignIn.RequireConfirmedAccount = true
