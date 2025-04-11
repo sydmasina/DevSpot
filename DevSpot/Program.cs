@@ -13,7 +13,8 @@ namespace DevSpot
             var builder = WebApplication.CreateBuilder(args);
 
             // Read connection string from Azure environment variables
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            var connectionString = "Data source=devspot.db";
 
             if (string.IsNullOrEmpty(connectionString))
             {
